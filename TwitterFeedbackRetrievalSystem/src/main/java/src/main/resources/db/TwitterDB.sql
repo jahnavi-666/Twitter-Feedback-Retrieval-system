@@ -1,0 +1,48 @@
+CREATE DATABASE IF NOT EXISTS TwitterDB;
+
+USE TwitterDB;
+
+CREATE TABLE IF NOT EXISTS Users (
+    UserID INT AUTO_INCREMENT PRIMARY KEY,
+    Username VARCHAR(255) NOT NULL UNIQUE,
+    FullName VARCHAR(255) NOT NULL,
+    ProfileImageURL VARCHAR(255),
+    Password VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS TwitterPosts (
+    PostID INT AUTO_INCREMENT PRIMARY KEY,
+    UserID INT,
+    PostText VARCHAR(255),
+    PostDate DATETIME,
+    TypeID INT,
+    PostURL VARCHAR(255),
+    FOREIGN KEY (UserID) REFERENCES Users(UserID),
+    FOREIGN KEY (TypeID) REFERENCES PostTypes(TypeID)
+);
+
+CREATE TABLE IF NOT EXISTS Comments (
+    CommentID INT AUTO_INCREMENT PRIMARY KEY,
+    PostID INT,
+    UserID INT,
+    CommentText VARCHAR(255),
+    CommentDate DATETIME,
+    FOREIGN KEY (PostID) REFERENCES TwitterPosts(PostID),
+    FOREIGN KEY (UserID) REFERENCES Users(UserID)
+);
+
+CREATE TABLE IF NOT EXISTS Feedback (
+    FeedbackID INT AUTO_INCREMENT PRIMARY KEY,
+    CommentID INT,
+    Sentiment VARCHAR(255),
+    ConfidenceScore INT,
+    FOREIGN KEY (CommentID) REFERENCES Comments(CommentID)
+);
+
+CREATE TABLE IF NOT EXISTS PostTypes (
+    TypeID INT AUTO_INCREMENT PRIMARY KEY,
+    TypeName VARCHAR(255),
+    Description VARCHAR(255)
+);
+
+
